@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "347030663157",
+    "project_id": "mine-ms",
+    "storage_bucket": "mine-ms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:347030663157:android:7582a27f00013cd43bbabc",
+        "android_client_info": {
+          "package_name": "com.ingemin.minems"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "347030663157-uf66cvcf0jfebdv51gh9h08sv85r9h4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi8m9_oir6LwkEmJNtpt5uor564WR_fxU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "347030663157-uf66cvcf0jfebdv51gh9h08sv85r9h4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
