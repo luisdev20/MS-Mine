@@ -1,6 +1,6 @@
 import 'package:minems/domain/entities/tipo_usuario.dart';
 import 'package:minems/infrastructure/controllers/ctipo_usuario.dart';
-
+/*
 class etipo_usuario {
   ctipo_usuario ec = ctipo_usuario();
   etipo_usuario() {
@@ -22,3 +22,4 @@ class etipo_usuario {
     ec.delete(tipo_usuario(codigo, ''));
   }
 }
+*/

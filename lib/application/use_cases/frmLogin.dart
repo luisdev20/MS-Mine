@@ -4,7 +4,6 @@ import 'package:minems/infrastructure/controllers/conexion.dart';
 
 final txtUN = TextEditingController();
 final txtPW = TextEditingController();
-const loginsuccess = SnackBar(content: Text('Success'));
 
 class frmLogin extends StatefulWidget {
   State<frmLogin> createState() => _frmLoginState();
@@ -52,11 +51,16 @@ class _frmLoginState extends State<frmLogin> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        await loginDB(txtUN.text, txtPW.text);
-                        txtUN.clear();
-                        txtPW.clear();
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(loginsuccess);
+                        if (await loginDB(txtUN.text, txtPW.text) == true) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('Success')));
+                          context.push('/frmlogin/userPage');
+                        } else {
+                          txtUN.clear();
+                          txtPW.clear();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Wrong credentials')));
+                        }
                       },
                       child: Text('Ingresar'))
                 ],

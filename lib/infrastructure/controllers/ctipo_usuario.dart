@@ -1,6 +1,6 @@
 import 'package:minems/domain/entities/tipo_usuario.dart';
 import 'package:minems/infrastructure/controllers/conexion.dart';
-
+/*
 class ctipo_usuario {
   conexion con = conexion();
   ctipo_usuario() {
@@ -25,3 +25,4 @@ class ctipo_usuario {
     con.write("DELETE FROM tipo_usuarios WHERE codigo='${dato.Codigo}'");
   }
 }
+*/

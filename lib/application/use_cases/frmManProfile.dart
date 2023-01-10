@@ -82,7 +82,7 @@ class _frmManProfileState extends State<frmManProfile> {
                               : null,
                     ),
                     TextFormField(
-                      controller: txtPW,
+                      controller: txtOC,
                       obscureText: true,
                       decoration: const InputDecoration(
                         labelText: 'Occupation',
@@ -103,7 +103,11 @@ class _frmManProfileState extends State<frmManProfile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Country'),
+                          Text(
+                            'Country',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black54),
+                          ),
                           DropdownButtonCountry(),
                         ],
                       ),
@@ -113,7 +117,8 @@ class _frmManProfileState extends State<frmManProfile> {
                     ),
                     ElevatedButton(
                         onPressed: () async {
-                          await loginDB(txtNA.text, txtLN.text, txtOC.text);
+                          await updateProfileDB(txtNA.text, txtLN.text,
+                              txtOC.text, dropdownValue);
                           txtNA.clear();
                           txtLN.clear();
                           txtOC.clear();
@@ -140,6 +145,7 @@ class _frmManProfileState extends State<frmManProfile> {
       );
 }
 
+String dropdownValue = country.first;
 const List<String> country = [
   'Select',
   'Perú',
@@ -160,24 +166,29 @@ class DropdownButtonCountry extends StatefulWidget {
 }
 
 class _DropdownButtonCountryState extends State<DropdownButtonCountry> {
-  String dropdownValue = country.first;
-
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      underline: Container(width: 0),
-      value: dropdownValue,
-      onChanged: (String? value) {
-        setState(() {
-          dropdownValue = value!;
-        });
-      },
-      items: country.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+    return Container(
+      width: 200,
+      child: DropdownButton<String>(
+        isExpanded: true,
+        underline: Container(width: 0),
+        value: dropdownValue,
+        onChanged: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        items: country.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.black54),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }

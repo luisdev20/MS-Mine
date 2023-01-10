@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minems/domain/entities/tipo_usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+// Borrar sql_conn
 import 'package:sql_conn/sql_conn.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
@@ -15,6 +19,24 @@ Future<List> getLista() async {
   });
   Future.delayed(const Duration(seconds: 5));
   return pe;
+}
+
+Future<bool?> loginDB(String username, String password) async {
+  await db
+      .collection('users')
+      .where('username', isEqualTo: username)
+      .where('password', isEqualTo: password)
+      .get()
+      .then((value) {
+    if (value.docs.isNotEmpty) {
+      print("FOUND!");
+      return true;
+    } else {
+      print("NOT FOUND :(");
+      return false;
+    }
+  }, onError: (e) => print('Error completing: $e'));
+  //Future.delayed(const Duration(seconds: 5));
 }
 
 Future<void> addData(String username, String password, String email,
@@ -36,64 +58,14 @@ Future<void> getData() async {
   });
 }
 
-Future<void> loginDB(String username, String password) async {
-  await db
-      .collection('users')
-      .where('username', isEqualTo: username)
-      .where('password', isEqualTo: password)
-      .get()
-      .then((value) {
-    if (value.docs.isNotEmpty) {
-      print("FOUND!");
-      return true;
-    } else {
-      print("NOT FOUND :(");
-      return false;
-    }
-  }, onError: (e) => print('Error completing: $e'));
-}
-
-Future<void> updateProfileDB(String name, String lastname, String occupation, String country) async {
+Future<void> updateProfileDB(
+    String name, String lastname, String occupation, String country) async {
   await db.collection('users').add({
-    'profile': username,
-    'password': password,
-    'email': email,
-    'created': created,
-    'updated': updated
-  });
-}
-
-//PARA SQL SERVER -- BORRAR
-class conexion {
-  Future<void> connect() async {
-    debugPrint("Connecting...");
-    try {
-      print('LOADING');
-      await SqlConn.connect(
-          ip: "192.168.1.11",
-          port: "1433",
-          databaseName: "DBBiblioteca; MSSQLSERVER",
-          username: "sa",
-          password: "12345");
-      debugPrint("Connected!");
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      debugPrint('');
+    'profile': {
+      'name': name,
+      'last_name': lastname,
+      'occupation': occupation,
+      'country': country,
     }
-  }
-
-  conexion() {
-    connect();
-  }
-
-  Future<void> read(String query) async {
-    var res = await SqlConn.readData(query);
-    debugPrint(res.toString());
-  }
-
-  Future<void> write(String query) async {
-    var res = await SqlConn.writeData(query);
-    debugPrint(res.toString());
-  }
+  });
 }

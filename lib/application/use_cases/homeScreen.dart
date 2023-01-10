@@ -3,7 +3,7 @@ import 'package:minems/application/use_cases/frmRegister.dart';
 import 'package:minems/application/use_cases/userPage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:minems/infrastructure/controllers/conexion.dart';
-import 'firebase_options.dart';
+import '../../firebase_options.dart';
 // Smooth Page Indicator
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
