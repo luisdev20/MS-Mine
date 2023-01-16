@@ -4,11 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:minems/domain/entities/tipo_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-// Borrar sql_conn
-import 'package:sql_conn/sql_conn.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
+// TESTING
+Future getDoc(id) async {
+  //CollectionReference collectionReference = db.collection('users');
+  //DocumentReference document = collectionReference.doc(id);
+  DocumentReference document = await db.doc('users/${id}');
+  document.get().then((doc) => print(doc.data()));
+}
+
+//arriba
 Future<List> getLista() async {
   //Lectura de datos
   List pe = [];
@@ -21,51 +28,61 @@ Future<List> getLista() async {
   return pe;
 }
 
-Future<bool?> loginDB(String username, String password) async {
-  await db
+Future<String> loginDB(String username, String password) async {
+  List us = [];
+  QuerySnapshot querySnapshot = await db
       .collection('users')
       .where('username', isEqualTo: username)
       .where('password', isEqualTo: password)
-      .get()
-      .then((value) {
-    if (value.docs.isNotEmpty) {
-      print("FOUND!");
-      return true;
-    } else {
-      print("NOT FOUND :(");
-      return false;
-    }
-  }, onError: (e) => print('Error completing: $e'));
-  //Future.delayed(const Duration(seconds: 5));
-}
+      .get();
 
-Future<void> addData(String username, String password, String email,
-    Timestamp created, Timestamp updated) async {
-  await db.collection('users').add({
-    'username': username,
-    'password': password,
-    'email': email,
-    'created': created,
-    'updated': updated
+  querySnapshot.docs.forEach((element) {
+    us.add(element.data());
   });
+  Future.delayed(const Duration(seconds: 5));
+  if (querySnapshot.docs.isNotEmpty) {
+    print("FOUND!");
+  } else {
+    print("NOT FOUND :(");
+  }
+  return us[0]["id"];
 }
 
-Future<void> getData() async {
-  await db.collection('users').get().then((value) {
-    for (var doc in value.docs) {
+/*
+Future<void> getData(String id) async {
+  await db.collection('users').doc(id).get().then((value) {
+    for (var doc in value) {
       print("${doc.id} => ${doc.data()}");
     }
   });
 }
-
-Future<void> updateProfileDB(
-    String name, String lastname, String occupation, String country) async {
-  await db.collection('users').add({
-    'profile': {
-      'name': name,
-      'last_name': lastname,
-      'occupation': occupation,
-      'country': country,
-    }
+*/
+Future<void> createUser(String username, String password, String email,
+    Timestamp created, Timestamp updated) async {
+  final docUser = await db.collection('users').doc();
+  docUser.set({
+    'username': username,
+    'password': password,
+    'email': email,
+    'created': created,
+    'updated': updated,
+    'id': docUser.id
   });
+}
+
+Future<void> updateProfileDB(String id, String name, String lastname,
+    String occupation, String country) async {
+  final docUser = await db
+      .collection('users')
+      .doc(id)
+      .update({
+        'profile': {
+          'name': name,
+          'last_name': lastname,
+          'occupation': occupation,
+          'country': country,
+        }
+      })
+      .then((value) => print("User $id has been updated"))
+      .catchError((error) => print("Failed to updated user: $error"));
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:minems/application/use_cases/frmManProfile.dart';
 import 'package:minems/application/use_cases/frmRegister.dart';
 import 'package:minems/application/use_cases/userPage.dart';
 import 'package:minems/application/use_cases/errorScreen.dart';
+import 'package:minems/application/use_cases/frmLogin.dart';
 import 'package:minems/application/use_cases/homeScreen.dart';
 
 final router = GoRouter(
@@ -18,7 +20,7 @@ final router = GoRouter(
       path: '/frmlogin',
       pageBuilder: (context, state) => CustomTransitionPage<void>(
           key: state.pageKey,
-          child: UserPage(),
+          child: frmLogin(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               FadeTransition(opacity: animation, child: child)),
     ),
@@ -32,9 +34,18 @@ final router = GoRouter(
               FadeTransition(opacity: animation, child: child)),
     ),
     GoRoute(
-      name: "user",
-      path: '/userpage',
-      builder: (__, _) => const UserPage(),
+      name: 'userpage',
+      path: '/userpage/:id',
+      builder: (context, state) => GetUserName(
+        documentId: state.params['id']!,
+      ),
+    ),
+    GoRoute(
+      name: "manProfile",
+      path: '/frmManProfile/:id',
+      builder: (context, state) => frmManProfile(
+        documentId: state.params['id']!,
+      ),
     ),
   ],
 );

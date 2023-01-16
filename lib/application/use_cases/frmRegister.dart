@@ -64,7 +64,7 @@ class _frmRegisterState extends State<frmRegister> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        await addData(txtUN.text, txtPW.text, txtEM.text,
+                        await createUser(txtUN.text, txtPW.text, txtEM.text,
                             Timestamp.now(), Timestamp.now());
                         txtUN.clear();
                         txtPW.clear();

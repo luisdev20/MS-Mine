@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minems/application/use_cases/frmRegister.dart';
+import 'package:minems/application/use_cases/listAmbiental.dart';
+import 'package:minems/application/use_cases/listMineria.dart';
 import 'package:minems/application/use_cases/userPage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:minems/infrastructure/controllers/conexion.dart';
@@ -37,20 +39,32 @@ class _MainPageViewState extends State<MainPageView> {
               controller: pageViewController ??= PageController(initialPage: 0),
               scrollDirection: Axis.horizontal,
               children: [
-                Image.network(
-                  'https://picsum.photos/seed/49/600',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
+                PageView(
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    Image.network(
+                      'https://firebasestorage.googleapis.com/v0/b/mine-ms.appspot.com/o/profilepics%2Fmineria2.jpg?alt=media&token=47bc1824-b620-4d31-a26e-3fbcba5d7065',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                    ListTileMineria(),
+                  ],
+                ),
+                PageView(
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    Image.network(
+                      'https://firebasestorage.googleapis.com/v0/b/mine-ms.appspot.com/o/profilepics%2Fambiental2.jpg?alt=media&token=cd19a551-a497-41cd-aa3f-9b5269769abc',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                    ListTileAmbiental()
+                  ],
                 ),
                 Image.network(
-                  'https://picsum.photos/seed/459/600',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-                Image.network(
-                  'https://picsum.photos/seed/472/600',
+                  'https://firebasestorage.googleapis.com/v0/b/mine-ms.appspot.com/o/profilepics%2Fgeologia2.jpg?alt=media&token=a4fefb7f-793d-40ec-80aa-57a64c8a32cc',
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,
@@ -64,7 +78,7 @@ class _MainPageViewState extends State<MainPageView> {
             child: FloatingActionButton(
               elevation: 0,
               onPressed: () {
-                context.push('/frmlogin');
+                context.push('/frmLogin');
                 setState(() {});
               },
               backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),

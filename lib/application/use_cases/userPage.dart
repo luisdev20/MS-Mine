@@ -1,19 +1,141 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:minems/domain/entities/usuario.dart';
+import 'package:minems/infrastructure/controllers/conexion.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserPage extends StatelessWidget {
-  const UserPage({super.key});
+class GetUserName extends StatelessWidget {
+  final String documentId;
+
+  GetUserName({required this.documentId});
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    return Scaffold(
+      body: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 120),
+            child: FutureBuilder<DocumentSnapshot>(
+              future: users.doc(documentId).get(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text("Something went wrong");
+                }
+
+                if (snapshot.hasData && !snapshot.data!.exists) {
+                  return Text("Document does not exist");
+                }
+
+                if (snapshot.connectionState == ConnectionState.done) {
+                  Map<String, dynamic> data =
+                      snapshot.data!.data() as Map<String, dynamic>;
+                  /*
+                  User(data['id'], data['username'], data['password'],
+                      data['email'], '', '', '', '');
+                  String username = data['username'];
+                  String email = data['email'];
+                  String name = data['profile']['name'];
+                  String lastname = data['profile']['last_name'];
+                  String occupation = data['profile']['occupation'];
+                  
+                  return Text("Username: ${username}\n"
+                      "Email: ${data['email']}\n"
+                      "Name: ${name}\n"
+                      "Last name: ${lastname}\n"
+                      "Occupation: ${occupation}\n");
+                      */
+                  return Text("Username: ${data['username']}\n"
+                      "Email: ${data['email']}\n");
+                }
+
+                return Text("loading");
+              },
+            ),
+          ),
+          SizedBox(
+            height: 120,
+          ),
+          Positioned(
+            top: 200,
+            left: 30,
+            child: TextButton(
+                onPressed: () {
+                  //context.push('/frmManProfile');
+                  final String location = context
+                      .namedLocation('manProfile', params: {'id': documentId});
+                  //params: {'id1': txtUN.text, 'id2': txtPW.text});
+                  context.push(location);
+                },
+                child: Text('Actualizar perfil')),
+          ),
+          Positioned(
+            top: 50,
+            left: 10,
+            child: FloatingActionButton(
+              elevation: 0,
+              onPressed: () => context.push('/'),
+              backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
+              child: Icon(Icons.clear),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/*
+class UserPage extends StatefulWidget {
+  String id1;
+  String id2;
+  UserPage({super.key, required this.id1, required this.id2});
+  State<UserPage> createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Stack(
           children: [
-            buildLogin(context),
+            FutureBuilder(
+                future: loginDB(widget.id1, widget.id2),
+                builder: ((context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: snapshot.data?.length,
+                        itemBuilder: ((context, index) {
+                          return ListTile(
+                            title: Text((snapshot.data![index]).toString()),
+                          );
+                          //Text(snapshot.data?[index].to);
+                        }));
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                })),
+            SizedBox(
+              height: 120,
+            ),
+            Positioned(
+              top: 280,
+              left: 10,
+              child: TextButton(
+                  onPressed: () {
+                    context.push('/frmManProfile');
+                  },
+                  child: Text('Modificar perfil')),
+            ),
             Positioned(
               top: 50,
               left: 10,
               child: FloatingActionButton(
                 elevation: 0,
-                onPressed: () => context.pop(),
+                onPressed: () => context.push('/'),
                 backgroundColor: Color.fromRGBO(0, 0, 0, 0.3),
                 child: Icon(Icons.clear),
               ),
@@ -23,8 +145,12 @@ class UserPage extends StatelessWidget {
       );
 }
 
+*/
+
+/*
+BORRAR LUEGO
 Widget buildLogin(BuildContext context) => Container(
-      color: Color.fromRGBO(0, 0, 0, 0.3),
+      color: Colors.white,
       alignment: Alignment.center,
       padding: EdgeInsets.only(top: 50.0),
       child: Column(
@@ -82,3 +208,4 @@ Widget buildMenuItems(BuildContext context) => Container(
         ],
       ),
     );
+*/

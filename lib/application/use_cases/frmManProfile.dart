@@ -12,6 +12,8 @@ final txtOC = TextEditingController();
 const loginsuccess = SnackBar(content: Text('Success'));
 
 class frmManProfile extends StatefulWidget {
+  final String documentId;
+  frmManProfile({required this.documentId});
   State<frmManProfile> createState() => _frmManProfileState();
 }
 
@@ -67,19 +69,14 @@ class _frmManProfileState extends State<frmManProfile> {
                         labelText: 'Name',
                       ),
                       validator: (value) => (value == null || value.isEmpty)
-                          ? "Usename cannot be empty"
+                          ? "Name cannot be empty"
                           : null,
                     ),
                     TextFormField(
                       controller: txtLN,
-                      obscureText: true,
                       decoration: const InputDecoration(
                         labelText: 'Last Name',
                       ),
-                      validator: (value) =>
-                          (value == null || value.isEmpty || value.length < 8)
-                              ? 'Password must be at least 8 characters'
-                              : null,
                     ),
                     TextFormField(
                       controller: txtOC,
@@ -87,10 +84,6 @@ class _frmManProfileState extends State<frmManProfile> {
                       decoration: const InputDecoration(
                         labelText: 'Occupation',
                       ),
-                      validator: (value) =>
-                          (value == null || value.isEmpty || value.length < 8)
-                              ? 'Password must be at least 8 characters'
-                              : null,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -117,13 +110,21 @@ class _frmManProfileState extends State<frmManProfile> {
                     ),
                     ElevatedButton(
                         onPressed: () async {
-                          await updateProfileDB(txtNA.text, txtLN.text,
-                              txtOC.text, dropdownValue);
+                          await updateProfileDB(widget.documentId, txtNA.text,
+                              txtLN.text, txtOC.text, dropdownValue);
                           txtNA.clear();
                           txtLN.clear();
                           txtOC.clear();
                           ScaffoldMessenger.of(context)
                               .showSnackBar(loginsuccess);
+                          context.push('/');
+                          /*
+                          final String location = context.namedLocation(
+                              'userpage',
+                              params: {'id': widget.documentId});
+                          //params: {'id1': txtUN.text, 'id2': txtPW.text});
+                          context.push(location);
+                          */
                         },
                         child: Text('Guardar'))
                   ],
